@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <head>
 	<meta charset="utf-8">
-	<link href="main.css" rel="stylesheet">
 	<meta name="name" content="Concept Map" />
 	<meta name="description" content="An abstract mapping for parameters. Works best if first tag is 'unique' among the tracklist, and the second tag applies to multiple tracks"/>
 	<meta name="mintags" content="2" />
@@ -52,9 +51,7 @@ text {
 // Inspired by http://www.findtheconversation.com/concept-map/
 // Loosely based on http://bl.ocks.org/mbostock/4063550
 //
-
-var data = [["iMedidata", ["RaveX/Rave", "Grants Manager", "Study Design Optimization", "CTMS", "Strategic Monitoring", "Balance", "Coder", "Safety Gateway", "Medical Imaging", "ePRO", "AppConnect", "Payments", "eConsent/Medidata Enroll", "SensorLink", "OPAL", "CSA", "Insights", "TotalView"]], ["Trial Planning", ["Grants Manager Planning", "Study Design Optimization", "Synthetic Control Arms", "Genomics"]], ["Trial Start Up", ["CTMS", "Grants Manager Contracting", "Strategic Monitoring", "Regulated Content Management"]], ["Trial Execution", ["RaveX/Rave", "Balance", "Coder", "Rave Safety Gateway", "Medical Imaging", "Patient Cloud", "Payments"]], ["Trial Close-Out", ["OPAL", "CSA", "Insights", "TotalView"]]];
-	
+var data = [["iMedidata", ["Cloud Admin","RaveX", "Batch Uploader", "Balance RTSM", "CTMS", "Coder", "Regulated Content Management", "Centralized Statistical Analysis", "MMI", "Safety Gateway", "Grants Manager", "Insights", "Payments", "MEDs","Operational Performance Analytics", "TSDV", "TotalView", "App Connect", "ePro", "Enroll", "Sensorlink"]], ["Trial Planning", []], ["Trial Start Up", []], ["Trial Execution", []], ["Trial Close-Out", []]];
 // transform the data into a useful representation
 // 1 is inner, 2, is outer
 // need: inner, outer, links
@@ -186,17 +183,10 @@ var onode = svg.append('g').selectAll(".outer_node")
     .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
     .on("mouseover", mouseover)
     .on("mouseout", mouseout)
-//    .on("click", click);
-
-//function click (d){
-//		window.open("https://saif429.github.io/Medidata_Visual/#"+d.id+".html", "_self");
-//}
-	<nav>
-		<ul class= "nav">
-			<li><a href="gitindex.html">iMedidata</a></li>
-			<li><a href="grantsmanager.html">Grants Manager</a></li>
-			</ul>
-	</nav>
+    .on("click", click);
+function click (d){
+		window.open("https://saif429.github.io/Medidata_Visual/"+d.id+".html", "_self");
+}
 onode.append("circle")
     .attr('id', function(d) { return d.id })
     .attr("r", 4.5);
