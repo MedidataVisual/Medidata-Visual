@@ -203,12 +203,12 @@ var link = svg.append('g').attr('class', 'links').selectAll(".link")
 // outer nodes
 var onode = svg.append('g').selectAll(".outer_node")
     .data(data.outer)
-  .enter().append("g")
+ 	 .enter().append("g")
     .attr("class", "outer_node")
     .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
     .on("mouseover", mouseover)
     .on("mouseout", mouseout)
-  	.on("click", click);
+	.on("click", click);
 function click (d){
 	window.open("https://MedidataVisual.github.io/Medidata-Visual/#"+d.id+".html", "_self");
 }
