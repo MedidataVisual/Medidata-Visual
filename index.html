@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <head>
 	<meta charset="utf-8">
+	<title>medidatavisual</title>
+	<link href="css/main.css" rel="stylesheet">
 	<meta name="name" content="Concept Map" />
 	<meta name="description" content="An abstract mapping for parameters. Works best if first tag is 'unique' among the tracklist, and the second tag applies to multiple tracks"/>
 	<meta name="mintags" content="2" />
@@ -51,7 +53,7 @@ text {
 // Inspired by http://www.findtheconversation.com/concept-map/
 // Loosely based on http://bl.ocks.org/mbostock/4063550
 //
-var data = [["iMedidata", ["RaveX and Rave", "Grants Manager", "Study Design Optimization", "CTMS", "Strategic Monitoring", "Balance", "Coder", "Safety Gateway", "Medical Imaging", "ePRO", "AppConnect", "Payments", "eConsent", "SensorLink", "OPAL", "CSA", "Insights", "TotalView"]], ["Trial Planning", ["Grants Manager Planning", "Study Design Optimization", "Synthetic Control Arms", "Genomics"]], ["Trial Start Up", ["CTMS", "Grants Manager Contracting", "Strategic Monitoring", "Regulated Content Management"]], ["Trial Execution", ["RaveX and Rave", "Balance", "Coder", "Safety Gateway", "Medical Imaging", "Patient Cloud", "Payments"]], ["Trial Close-Out", ["OPAL", "CSA", "Insights", "TotalView"]]];
+var data = [["iMedidata", ["RaveX/Rave", "Grants Manager", "Study Design Optimization", "CTMS", "Strategic Monitoring", "Balance", "Coder", "Safety Gateway", "Medical Imaging", "ePRO", "AppConnect", "Payments", "eConsent", "SensorLink", "OPAL", "CSA", "Insights", "TotalView"]], ["Trial Planning", ["Grants Manager Planning", "Study Design Optimization", "Synthetic Control Arms", "Genomics"]], ["Trial Start Up", ["CTMS", "Grants Manager Contracting", "Strategic Monitoring", "Regulated Content Management"]], ["Trial Execution", ["RaveX/Rave", "Balance", "Coder", "Safety Gateway", "Medical Imaging", "Patient Cloud", "Payments"]], ["Trial Close-Out", ["OPAL", "CSA", "Insights", "TotalView"]]];
 // transform the data into a useful representation
 // 1 is inner, 2, is outer
 // need: inner, outer, links
@@ -61,22 +63,29 @@ var data = [["iMedidata", ["RaveX and Rave", "Grants Manager", "Study Design Opt
 var outer = d3.map();
 var inner = [];
 var links = [];
+
 var outerId = [0];
+
 data.forEach(function(d){
 	if (d == null)
 		return;
 	i = { id: 'i' + inner.length, name: d[0], related_links: [] };
 	i.related_nodes = [i.id];
 	inner.push(i);
+
 	if (!Array.isArray(d[1]))
 		d[1] = [d[1]];
+
 	d[1].forEach(function(d1){
+
 		o = outer.get(d1);
+
 		if (o == null)
 		{
 			o = { name: d1,	id: 'o' + outerId[0], related_links: [] };
 			o.related_nodes = [o.id];
 			outerId[0] = outerId[0] + 1;
+
 			outer.set(d1, o);
 		}
 		// create the links
@@ -89,16 +98,20 @@ data.forEach(function(d){
 		o.related_links.push(l.id);
 	});
 });
+
 data = {
 	inner: inner,
 	outer: outer.values(),
 	links: links
 }
+
 // sort the data -- TODO: have multiple sort options
 outer = data.outer;
 data.outer = Array(outer.length);
+
 var i1 = 0;
 var i2 = outer.length - 1;
+
 for (var i = 0; i < data.outer.length; ++i)
 {
 	if (i % 2 == 1)
@@ -114,22 +127,29 @@ var color = d3.scale.linear()
     .domain([60, 220])
     .range([colors.length-1, 0])
     .clamp(true);
+
 var diameter = 960;
 var rect_width = 100;
 var rect_height = 20;
+
 var link_width = "1px";
+
 var il = data.inner.length;
 var ol = data.outer.length;
+
 var inner_y = d3.scale.linear()
     .domain([0, il])
     .range([-(il * rect_height)/2, (il * rect_height)/2]);
+
 mid = (data.outer.length/2.0)
 var outer_x = d3.scale.linear()
     .domain([0, mid, mid, data.outer.length])
     .range([15, 170, 190 ,355]);
+
 var outer_y = d3.scale.linear()
     .domain([0, data.outer.length])
     .range([0, diameter / 2 - 120]);
+
 // setup positioning
 data.outer = data.outer.map(function(d, i) {
     d.x = outer_x(i);
@@ -141,6 +161,7 @@ data.inner = data.inner.map(function(d, i) {
     d.y = inner_y(i);
     return d;
 });
+
 function get_color(name)
 {
     var c = Math.round(color(name));
@@ -151,6 +172,7 @@ function get_color(name)
 // Can't just use d3.svg.diagonal because one edge is in normal space, the
 // other edge is in radial space. Since we can't just ask d3 to do projection
 // of a single point, do it ourselves the same way d3 would do it.
+
 function projectX(x)
 {
     return ((x - 90) / 180 * Math.PI) - (Math.PI/2);
@@ -161,11 +183,13 @@ var diagonal = d3.svg.diagonal()
     .target(function(d) { return {"x": d.inner.y + rect_height/2,
                                   "y": d.outer.x > 180 ? d.inner.x : d.inner.x + rect_width}; })
     .projection(function(d) { return [d.y, d.x]; });
+
 var svg = d3.select("body").append("svg")
     .attr("width", diameter)
     .attr("height", diameter)
   .append("g")
     .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+
 // links
 var link = svg.append('g').attr('class', 'links').selectAll(".link")
     .data(data.links)
@@ -175,6 +199,7 @@ var link = svg.append('g').attr('class', 'links').selectAll(".link")
     .attr("d", diagonal)
     .attr('stroke', function(d) { return get_color(d.inner.name); })
     .attr('stroke-width', link_width);
+
 // outer nodes
 var onode = svg.append('g').selectAll(".outer_node")
     .data(data.outer)
@@ -183,29 +208,35 @@ var onode = svg.append('g').selectAll(".outer_node")
     .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
     .on("mouseover", mouseover)
     .on("mouseout", mouseout)
-<nav>
-	<ul class= "nav">
-		<li><a href="index.html">iMedidata</a></li>
-		<li><a href="grantsmanager.html">Grants Manager</a></li>
-	</ul>
-</nav>
-	
-// .on("click", click);
-//function click (d){
-		//window.open("https://saif429.github.io/Medidata_Visual/"+d.id+".html", "_self");
+  	.on("click", click);
+function click (d){
+	window.open("https://MedidataVisual.github.io/Medidata-Visual/#"+d.id+".html", "_self");
 }
+	//	.on("click", click);
+	//function click (d){
+		//<nav>
+		//	<ul class= "nav">
+				//<li><a href="gitindex.html">iMedidata</a></li>
+			//	<li><a href="grantsmanager.html">Grants Manager</a></li>
+		//	</ul>
+	//	</nav>
+	//}
+
 onode.append("circle")
     .attr('id', function(d) { return d.id })
     .attr("r", 4.5);
+
 onode.append("circle")
     .attr('r', 20)
     .attr('visibility', 'hidden');
+
 onode.append("text")
 	.attr('id', function(d) { return d.id + '-txt'; })
     .attr("dy", ".31em")
     .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
     .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
     .text(function(d) { return d.name; });
+
 // inner nodes
 var inode = svg.append('g').selectAll(".inner_node")
     .data(data.inner)
