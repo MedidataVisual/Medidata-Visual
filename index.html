@@ -40,6 +40,7 @@ text {
 </style>
 </head>
 <body>
+	<center>
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script>
 //
@@ -279,4 +280,6 @@ function mouseout(d)
     for (var i = 0; i < d.related_links.length; i++)
         d3.select('#' + d.related_links[i]).attr('stroke-width', link_width);
 }
+
+</center>
 </script>
